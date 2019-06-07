@@ -13,15 +13,14 @@
 # you will see them accessed via {{ site.title }}, {{ site.email }}, and so on.
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
-title: MM
-email:
+title: FSec404
+email: venkat.abhishek.1999@gmail.com
 description: >- # this means to ignore newlines until "baseurl:"
-  Write an awesome description for your new site here. You can edit this
-  line in _config.yml. It will appear in your document head meta (for
-  Google search results) and in your feed.xml site description.
-twitter_username: username
-github_username: username
-minimal_mistakes_skin: default
+  One stop location for all things security related and ocassionaly some random side
+  projects of mine.
+# twitter_username: username
+github_username: venkat-abhi
+minimal_mistakes_skin: dark
 search: true
 
 # Build settings
@@ -58,34 +57,27 @@ plugins:
   - jekyll-include-cache
 
 author:
-  name   : "First Lastname"
-  avatar : "/assets/images/bio-photo.jpg"
-  bio    : "My awesome biography constrained to a sentence or two goes here."
+  name   : "Abhishek K Venkata"
+#  avatar : "/assets/images/bio-photo.jpg"
+  bio    : "I like to poke at applications to see how they react."
   links:
-    - label: "Website"
-      icon: "fas fa-fw fa-link"
-      url: "https://"
-    - label: "Twitter"
-      icon: "fab fa-fw fa-twitter-square"
-      url: "https://twitter.com/"
+    - label: "LinkedIn"
+      icon: "fab fa-fw fa-linkedin"
+      url: "https://linkedin.com/in/abhishek-venkata"
+
     - label: "GitHub"
       icon: "fab fa-fw fa-github"
-      url: "https://github.com/"
-    - label: "Instagram"
-      icon: "fab fa-fw fa-instagram"
-      url: "https://instagram.com/"
+      url: "https://github.com/venkat-abhi"
 
 footer:
   links:
-    - label: "Twitter"
-      icon: "fab fa-fw fa-twitter-square"
-      url: "https://twitter.com/"
+    - label: "LinkedIn"
+      icon: "fas fa-fw fa-linkedin"
+      url: "https://linkedin.com/in/abhishek-venkata"
+      
     - label: "GitHub"
       icon: "fab fa-fw fa-github"
-      url: "https://github.com/"
-    - label: "Instagram"
-      icon: "fab fa-fw fa-instagram"
-      url: "https://instagram.com/"
+      url: "https://github.com/venkat-abhi"
 
 defaults:
   # _posts
@@ -99,6 +91,8 @@ defaults:
       comments: true
       share: true
       related: true
+      breadcrumbs: true
+      
   # _pages
   - scope:
       path: "_pages"
@@ -106,6 +100,7 @@ defaults:
     values:
       layout: single
       author_profile: true
+      breadcrumbs: true
 
 category_archive:
   type: liquid
@@ -113,3 +108,10 @@ category_archive:
 tag_archive:
   type: liquid
   path: /tags/
+
+  analytics:
+  provider: "google-gtag"
+  google:
+    tracking_id: "UA-141668992-1"
+    anonymize_ip: false # default
+
