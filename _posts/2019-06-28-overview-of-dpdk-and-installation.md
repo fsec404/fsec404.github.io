@@ -4,9 +4,9 @@ date: 2019-06-28
 categories:
   - blog
 tags:
-  - DPDK
-  - Kernel Bypass
   - Basic forwarder
+  - Kernel Bypass
+  - DPDK
 ---
 
 # Introduction
