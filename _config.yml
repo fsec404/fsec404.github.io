@@ -16,7 +16,7 @@
 title: FSec404
 email: venkat.abhishek.1999@gmail.com
 description: >- # this means to ignore newlines until "baseurl:"
-  One stop location for all things security related and ocassionaly some random side
+  Blog for all things security, and network related and ocassionaly some random side
   projects of mine.
 # twitter_username: username
 github_username: venkat-abhi
@@ -33,7 +33,7 @@ paginate_path: /page:num/
 timezone: # https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
 
 include:
-  - _pages
+  - _pages/
 
 # Exclude from processing.
 # The following items will not be processed, by default. Create a custom list
