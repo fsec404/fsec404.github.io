@@ -1,6 +1,8 @@
 ---
-title: "Overiew of Intel DPDK and Installation"
+title: "A Look into Intel DPDK and a Basic Forwarder"
 date: 2019-06-28
+toc: true
+toc_label: "Table of Contents"
 categories:
   - blog
 tags:
@@ -13,7 +15,7 @@ tags:
 
 The current Linux network stack, although very capable for general purpose applications, is unable to handle high throughputs required in applications such as the mobile core network processing.
 
-This performance drop is mainly due to the number of levels the packets has to pass through before it is available to the user application. First, the packet, on arrival, is placed in the Rx/Tx queues of the NIC, then it is passed to the ring buffers from where the socket reads it. Then finally, the socket is used to pass the data to the application running in the user space. 
+This performance drop is mainly due to the number of levels the packets has to pass through before it is available to the user application. First, the packet, on arrival, is placed in the Rx/Tx queues of the NIC, then it is passed to the ring buffers from where the socket finally reads it and passes the data to the application running in the user space. 
 
 ![packet through kernel](../../assets/images/dpdk/pkt-kernel.PNG)
 
@@ -33,9 +35,9 @@ DPDK provides a framework which makes many tasks essential to core networks, suc
 
 To move the control of the NICs to the userspace applications, we must first unbind them from the kernel drivers and bind them to the drivers provided by DPDK. This binding/unbinding is carried out by utilizing a feature of the Linux kernel where every driver has bind and unbind files associated with it. To unbind a device from a driver, we must write the bus id of the device to the unbind file and to bind the device a kernel driver; we must write the bus id of the device to the bind file. Note that we must first ensure that no other driver is controlling the device before it is added to the bind file ([manual-driver-binding]). 
 
-# Installation
+# DPDK Installation
 
-In this tutorial, we are installing the DPDK (Stable)18.11.2 version. It is present at [Download][dpdk-download].
+In this tutorial, we are installing the DPDK 18.11.2 (Stable) version. It is present at [Download][dpdk-download].
 
 On extracting the folder, we can go into the *usertools/* directory. In this directory, a setup script **(dpdk-setup.sh)** is present which automates most of the steps required to set up the DPDK environment. Note that it is possible to compile and set up the environment manually, but in this tutorial, we are using the script. 
 
@@ -102,6 +104,8 @@ We get the following output on running the above command.
 
 ![hello world](../../assets/images/dpdk/hello-world.PNG)
 
+# Basic Forwarder
+
 Next, we test the basic forwarder present in the *skeleton/* directory. Note that this application requires that we have two ports, but since my setup is using only one, I have modified the program */examples/skeleton/basic-fwd.c* in the following manner. 
 
 At line 175, change 
@@ -166,7 +170,7 @@ print_ether_addr(const char *what, struct ether_addr *eth_addr)
 We can now compile the program using the command to compile all the examples. On running the program using the following command, 
 
 ```bash
-sudo ./build/examples/skelet on/x86_64-native-linuxapp-gcc/basicfwd
+sudo ./build/examples/skeleton/x86_64-native-linuxapp-gcc/basicfwd
 ```
 
 we get the following output.
