@@ -109,7 +109,7 @@ tag_archive:
   type: liquid
   path: /tags/
 
-  analytics:
+analytics:
   provider: "google-gtag"
   google:
     tracking_id: "UA-141668992-1"
