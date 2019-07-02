@@ -37,11 +37,24 @@ To move the control of the NICs to the userspace applications, we must first unb
 
 # DPDK Installation
 
-In this tutorial, we are installing the DPDK 18.11.2 (Stable) version. It is present at [Download][dpdk-download].
+In this tutorial, we are installing the DPDK 18.11.2 (Stable) version. It is present at [Download][dpdk-download]. My setup is a Ubuntu 16.04.06 64-bit machine running as a VM with two network interfaces. On VMWare, we can add network interfaces by adding network adapters in the virtual machine's settings page. Similar steps can be followed in VirtualBox.
 
+## System Requirements
+Before we move on to the installation of DPDK, our system needs to have a few required tools, and libraries.
+
+* make,
+* GNU Coreutils,
+* gcc version >= 4.9
+* gcc-multilib,
+* libnuma-dev,
+* Python version 2.7+ or 3.2+
+
+A more complete set of prerequisites are present at [requirements][dpdk-requirements].
+
+## Installation
 On extracting the folder, we can go into the *usertools/* directory. In this directory, a setup script **(dpdk-setup.sh)** is present which automates most of the steps required to set up the DPDK environment. Note that it is possible to compile and set up the environment manually, but in this tutorial, we are using the script. 
 
-My setup is a Ubuntu 16.04.06 64-bit machine running as a VM with two interfaces. Since it is an x86-64 architecture, I have selected the *x86_64-native-linuxapp-gcc* build (option 15). 
+ Since it is an x86-64 architecture, I have selected the *x86_64-native-linuxapp-gcc* build (option 15). 
 
 ![dpdk-setup](../../assets/images/dpdk/setup-menu.PNG)
 
@@ -177,6 +190,7 @@ we get the following output.
 
 ![mac addresses basicfwd](../../assets/images/dpdk/mac-addr-basicfwd.PNG)
 
+This is the end of my first blog post. Please let me know if you have any suggestions.
 
 [dpdk-mailing-list]: https://dev.dpdk.narkive.com/ykSt5Rlc/dpdk-dev-which-driver-to-bind-for-the-nic-interfaces
 
@@ -185,4 +199,6 @@ we get the following output.
 [manual-driver-binding]: https://lwn.net/Articles/143397/
 
 [dpdk-download]: http://core.dpdk.org/download/
+
+[dpdk-requirements]: https://doc.dpdk.org/guides-18.11/linux_gsg/sys_reqs.html
 
