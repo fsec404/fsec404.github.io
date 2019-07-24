@@ -1,5 +1,5 @@
 ---
-title: "A Look into ARP cache poisoning and using it to perform MITM attack"
+title: "A Look into Arp Cache Poisoning and Using It to Perform MITM Attack"
 date: 2019-07-24
 toc: true
 toc_label: "Table of Contents"
@@ -27,11 +27,13 @@ The ARP packet has the following format.
 
 In IPv4 over Ethernet, the sender or receiver protocol address refers to the IP address of the sender or receiver. The hardware address refers to the 48-bit Ethernet address. To resolve a host with an IP address, say for example X.X.X.X, S broadcasts (Target hardware address is FF:FF:FF:FF:FF:FF or all 1s) out an ARP request with the sender protocol address field set to our IP address, say for example Y.Y.Y.Y, asking
 
-  “Who is X.X.X.X? tell Y.Y.Y.Y”
+```
+Who is X.X.X.X? tell Y.Y.Y.Y
+```
 
 All the hosts on the network check to see if the target IP address matches their address on receiving the ARP request. The host ‘X.X.X.X,’ on seeing that its IP address matches the one in the ARP request, sends out an ARP reply to Y.Y.Y.Y along with its Ethernet address. Once S receives the ARP request, it adds the Ethernet address of R to a cache table and starts sending out whatever packets protocol P has to send.
 
-The following image gives an example of the ARP request and response. 
+The following image gives an example of an ARP request and response. 
 
 ![ARP Packet Format](../../assets/images/arp-spoofing/wireshark-arp.png)
 
@@ -137,7 +139,7 @@ echo 1 > /proc/sys/net/ipv4/ip_forward
 ```
 
 On windows, we must carry out the following steps.
-
+```
 1. Open Regedit as adminstrator,
 2. Navigate to the HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\ Services\Tcpip\Parameters\IPEnableRouter setting,
 3. Right click and select Modify,
@@ -146,8 +148,9 @@ On windows, we must carry out the following steps.
 6. Navigate to the Routing and Remote Access service, 
 7. Right click and select Properties, 
 8. Change to Automatic and click on Start to start the service.
+```
 
-### Experiments
+### MITM Results
 On running the *perform_mitm* function, we now receive all communications between the gateway and the target. This can be seen in wireshark. On sending GET request to *www.resonous.com*, we can see the request in my laptop.
 
 ![ARP Packet Format](../../assets/images/arp-spoofing/curl-resonous.png)
