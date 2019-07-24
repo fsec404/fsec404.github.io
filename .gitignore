@@ -5,3 +5,6 @@ Gemfile.lock
 
 _posts/default-posts
 .vscode
+
+assets/codes/
+assets/drafts/
