@@ -45,7 +45,7 @@ If host A wants to send data to host B on the same network, it will first resolv
 ## Performing ARP Cache Poisoning With Scapy
 We can poison a target's ARP cache by sending spoofed ARP responses. Before we can send
 the spoofed ARP messages, we need the target's MAC address. To get the MAC address, we
-can send ARP request packet to the target. This can be done in following manner.
+can send an ARP request to the target. This can be done in the following manner.
 
 ```python
 def get_mac(ip):
@@ -59,7 +59,7 @@ def get_mac(ip):
   return (resp[Ether].src)
 ```
 
-Once we get the target's MAC address, we can now poison its cache by sending a spoofed ARP response. The target might flush it's ARP cache and send out an ARP request to the actual destination. To prevent it from overwriting our spoofed ARP cache entry, we must continously keep sending it spoofed ARP responses. We can achieve this by using the function *poison_arp_cache* given below. The function *poison_arp_cache* must be looped until the attacker wants to stop the attack.
+Once we get the target's MAC address, we can now poison its cache by sending a spoofed ARP response. The target might flush it's ARP cache and send out an ARP request to the actual destination. To prevent it from overwriting our spoofed ARP cache entry, we must continuously keep sending it spoofed ARP responses. We can achieve this by using the function *poison_arp_cache* given below. The function *poison_arp_cache* must be looped until the attacker wants to stop the attack.
 
 ```python
 def poison_arp_cache(target_ip, target_mac_addr, spoofed_ip, spoofed_mac_addr=Ether().src):
@@ -107,7 +107,7 @@ def get_default_gateway_details():
   return p[IP].src, p[Ether].src
 ```
 
-In the *get_default_gateway_ip* function, since the TTL is set to zero, the first host on the route which is the default gateway, responds with an ICMP error message (TTL Zero During Transit). The function then read the ICMP error message to get the default gateway's IP address, and MAC address.
+In the *get_default_gateway_ip* function, since the TTL is set to zero, the first host on the route which is the default gateway, responds with an ICMP error message (TTL Zero During Transit). The function then reads the ICMP error message to get the default gateway's IP address and MAC address.
 
 Using the information we got from the *get_default_gateway_details* function, we can perform the MITM attack. All the above functions can be called from a single function *perform_mitm* which poisons
 both the target's and default gateway's ARP cache. 
@@ -130,9 +130,9 @@ def perform_mitm(target_ip):
 ```
 
 #### Side Note on Enabling Packet Forwarding
-To allow packets from the target or the gateway to be forwarded, we must enable packet forwarding so that our system acts as a router. Whenver a packet not destined to our system arrives, the OS automatically forwards it to the appropriate host. 
+To allow packets from the target or the gateway to be forwarded, we must enable packet forwarding so that our system acts as a router. Whenever a packet not destined to our system arrives, the OS automatically forwards it to the appropriate host. 
 
-To enable this on linux, we must do the following.
+To enable this on Linux, we must do the following.
 
 ```bash
 echo 1 > /proc/sys/net/ipv4/ip_forward
@@ -140,13 +140,13 @@ echo 1 > /proc/sys/net/ipv4/ip_forward
 
 On windows, we must carry out the following steps.
 ```
-1. Open Regedit as adminstrator,
+1. Open Regedit as administrator,
 2. Navigate to the HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\ Services\Tcpip\Parameters\IPEnableRouter setting,
-3. Right click and select Modify,
+3. Right-click and select Modify,
 4. Change 0 to 1 and exit the editor,
 5. Type services.msc in the command prompt,
 6. Navigate to the Routing and Remote Access service, 
-7. Right click and select Properties, 
+7. Right-click and select Properties, 
 8. Change to Automatic and click on Start to start the service.
 ```
 
@@ -159,15 +159,15 @@ On running the *perform_mitm* function, all communications between the gateway a
 
 ![ARP Packet Format](../../assets/images/arp-spoofing/wireshark-get-depth.png)
 
-Since the GET request resulted in moved result. We can curl the website over https in the following manner. 
+Since the GET request resulted in moved result, we can curl the website over https in the following manner. 
 
 ![ARP Packet Format](../../assets/images/arp-spoofing/res-https.png)
 
-The same can be seen in wireshark. 
+The same can be seen in Wireshark. 
 
 ![ARP Packet Format](../../assets/images/arp-spoofing/wireshark-https-depth.png)
 
-That's it for this post. The complete script is available at my github [page][page]
+That's it for this post. The complete script is available at my GitHub [page][page]
 
 
 [page]: https://github.com/venkat-abhi/arp-cache-poisoner
