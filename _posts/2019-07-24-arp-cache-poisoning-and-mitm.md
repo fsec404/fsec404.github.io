@@ -32,7 +32,7 @@ The ARP packet has the following format.
 ![ARP Packet Format](../../assets/images/arp-spoofing/main-arp-format.png)
 
 In the above image, we can see that there is a field *Opcode*. This field specifies the nature of 
-the ARP messages being sent. In this blog post, we are mainly concerned with the following two types of ARP messages.
+the ARP messages being sent. In this blog post, we are mainly concerned with the sender's and receiver's source and destination address in the following two types of ARP messages.
 
 1.	ARP Request, and
 2.	ARP Reply
@@ -129,7 +129,7 @@ def perform_mitm(target_ip):
     poison_arp_cache(default_gateway_ip, default_gateway_mac, target_ip)
 ```
 
-#### Side Note on Enabling Packet Forwarding
+### Note on Enabling Packet Forwarding
 To allow packets from the target or the gateway to be forwarded, we must enable packet forwarding so that our system acts as a router. Whenever a packet not destined to our system arrives, the OS automatically forwards it to the appropriate host. 
 
 To enable this on Linux, we must do the following.
@@ -150,7 +150,7 @@ On windows, we must carry out the following steps.
 8. Change to Automatic and click on Start to start the service.
 ```
 
-### MITM Results
+# MITM Results
 On running the *perform_mitm* function, all communications between the gateway and the target now pass through my laptop. On sending a GET request to **www.resonous.com** from the Raspberry PI, we can see the same request in my laptop.
 
 ![ARP Packet Format](../../assets/images/arp-spoofing/curl-resonous.png)
