@@ -14,7 +14,7 @@ tags:
 # Introduction
 So you've learned to create a PHP form recently and are very excited to set up a website with this form. You might think, "Ah, it's just a simple form, what could go wrong?". Well, you wouldn't be the first one to believe that. 
 
-So let's take a look at a simple form that I have written.
+So let's take a look at a form that I have written.
 
 ```php
 <!DOCTYPE html>
@@ -134,7 +134,7 @@ Now when we try to input javascript code, we get the following ouput.
 
 By looking at the source, we can see that the tags are converted to entities and are rendered instead of interpreted by the browser.
 
-![cookie](../../assets/images/xss/sourcechars.png)
+![source-encoded](../../assets/images/xss/sourcechars.png)
 
 
 * Another step that can be added is to use a whitelist. If a field can accept only a finite number of different inputs, we can check if the user-supplied data is in the whitelist. If the user passes in invalid data, we can simply reject it.
