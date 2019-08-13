@@ -141,4 +141,4 @@ By looking at the source, we can see that the tags are converted to entities and
 
 * A more comprehensive solution is to use a Web Application Firewall (WAF). The WAF sits between the server and the client and filters out any message that contains malicious code. An open-source implementation of a WAF is that can be utilized (with care!) is provided by ModSecurity.
 
-Note that this post serves to only give a basic idea on XSS. With attackers coming up with new XSS attack vectors regularly, we must keep ourselves updated to stay safe. For an in depth guide on XSS, check out OWASPs post on [XSS][https://www.owasp.org/index.php/Cross-site_Scripting_(XSS)]. In a later post, I will talk about Stored XSS. 
+Note that this post serves to only give a basic idea on XSS. With attackers coming up with new XSS attack vectors regularly, we must keep ourselves updated to stay safe. For an in depth guide on XSS, check out OWASPs post on [XSS](https://www.owasp.org/index.php/Cross-site_Scripting_(XSS)). In a later post, I will talk about Stored XSS. 
