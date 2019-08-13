@@ -38,11 +38,11 @@ Below we can see the form in the browser.
 
 ![Simple Form](../../assets/images/xss/1.png)
 
-After typing my name in the input box, we get the following output.
+After typing in my name, we get the following output.
 
 ![Input in Form](../../assets/images/xss/2.png)
 
-Now you might be thinking that all is well and good, but what if someone submits the following text as input.
+Now you might be thinking that "isn't this how the above form should work". But what if someone submits the following text as input.
 
 ```html
 <b>Abhishek</b>
@@ -60,16 +60,16 @@ Wait, what? So if you pass in an HTML tag, the output is modified based on the t
 
 This can be verified by looking at the source.
 
-![Page-Source-Inject-1](../../assets/images/xss/inject-1.png)
+![Page-Source-Inject-1](../../assets/images/xss/5.png)
 
-When the browser looks at the HTML, it sees the `<b>` tag and thinks that text in between is supposed to be rendered bold. The ability to pass in HTML code is known as HTML injection. This has a lot of implications (well other than being able to stylize your output). What if we want to pass in javascript code in the text field. Let's try the following input.
+When the browser looks at the HTML, it sees the `<b>` tag and thinks that text in between is supposed to be rendered bold. This ability to pass in HTML code is known as HTML injection. This has a lot of implications (well other than being able to stylize your output). What if we were to pass javascript code in the text field. Let's try the following input.
 
 ```javascript
 <script>alert("test");</script>
 ```
 We get the following output.
 
-![JS in Form](../../assets/images/xss/5.png)
+![JS in Form](../../assets/images/xss/4.png)
 
 So why did this happen? Well, this is because like in the previous example, we were able to inject code into the page returned by the server. This can be seen by looking at the source. 
 
