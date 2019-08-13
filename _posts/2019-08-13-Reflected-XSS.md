@@ -105,7 +105,7 @@ htmlspecialchars(): encodes special characters to HTML entities,
 strip_tags(): removes the tags altogether and returns the inner text.
 ```
 
-Let's use the two functions and see what happens. Modifying the php code dynamic content is present, i.e., 
+Let's use the two functions and see what happens. 
 
 ```php
 <!DOCTYPE html>
@@ -141,4 +141,4 @@ By looking at the source, we can see that the tags are converted to entities and
 
 * A more comprehensive solution is to use a Web Application Firewall (WAF). The WAF sits between the server and the client and filters out any message that contains malicious code. An open-source implementation of a WAF is provided by ModSecurity can be utilized (with care!).
 
-Note that this post serves to only give a basic idea on XSS and serve as a base. With attackers coming up with new XSS attack vectors regularly, we must keep ourselves updated to stay safe. In a later post, I will talk about Stored XSS. 
+Note that this post serves to only give a basic idea on XSS and is a base. With attackers coming up with new XSS attack vectors regularly, we must keep ourselves updated to stay safe. In a later post, I will talk about Stored XSS. 
