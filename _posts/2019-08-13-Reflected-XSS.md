@@ -16,7 +16,7 @@ So you've learned to create a PHP form recently and are very excited to set up a
 
 So let's take a look at a simple form that I have written.
 
-```PHP
+```php
 <!DOCTYPE html>
 <html>
 <body>
@@ -44,7 +44,7 @@ After typing my name in the input box, we get the following output.
 
 Now you might be thinking that all is well and good, but what if someone submits the following text as input.
 
-```HTML
+```
 <b>Abhishek</b>
 ```
 
@@ -54,7 +54,7 @@ We get the following output.
 
 Wait, what? So if you pass in an HTML tag, the output is modified based on the tag. This is because when the PHP code echos the content of 'fname,' the resulting HTML sent back from the server looks like this. 
 
-```HTML
+```
 <p>Hi <b>Abhishek</b>!</p>
 ```
 
