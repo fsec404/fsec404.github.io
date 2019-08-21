@@ -120,7 +120,7 @@ def spoofed_dir(dummy):
 if __name__ == '__main__':
   app.run(host='192.168.137.1', ssl_context='adhoc', port=443)
 ```
-The host argument must be set to the IP address on which the webserver is being run on. Now any page accessed by the target will be return the html given above.
+The host argument must be set to the IP address on which the webserver is being run on. Now any page accessed by the target will result in the above html being returned.
 
 # Results
 I am running the dns-hijacker and the web server on a Raspberry PI 3B+ with the target as my iPhone.
