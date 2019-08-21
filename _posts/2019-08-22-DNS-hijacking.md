@@ -123,13 +123,15 @@ if __name__ == '__main__':
 the host argument must be set to the IP address on which the webserver is being run on. Now any page accessed by the target will be return the html given above.
 
 # Results
-I have run the dns-hijacker on a Raspberry PI 3B+ with the target as my iPhone. By running the scripts in the following manner
+I am running the dns-hijacker and the web server on a Raspberry PI 3B+ with the target as my iPhone.
 
 ![dns-hijacker](../../assets/videos/dns-hijacker.gif)
 
-Once the DNS hijacker and the web server are running, sending a request from my iPhone results in the following.
+Once the DNS hijacker and the web server are started, sending a request from my iPhone results in the following.
 
 ![pwned](../../assets/videos/pwned.gif)
 
 We can see that a GET request to `victoria.dev` was successfully redirected to our webpage. yaaa.
-The full script is available on my github ![page](https://github.com/venkat-abhi/dns-redirector).
+That's it for this post. The full script is available on my github [page][page].
+
+[page]: https://github.com/venkat-abhi/dns-redirector
