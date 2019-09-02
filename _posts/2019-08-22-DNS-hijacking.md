@@ -13,19 +13,19 @@ tags:
 ---
 
 # Introduction
-In my previous [post][arp], we had a look at poisoning ARP caches which allowed us to intercept the target's traffic. In this post, we build on that to intercept all DNS requests of the
+In my previous [post][arp], we had a look at poisoning ARP caches which, allowed us to intercept the target's traffic. In this post, we build on that to intercept all DNS requests of the
 target and provide a spoofed reply pointing to a web server running on our machine.
 
 # DNS
-Everytime a user types in an URL into the browser or any web client, the client resolves or "translates" the URL into an IP address. It does this to identify where to send the corresponding HTTP request. To translate the URL into an IP address, the following steps take place:
+Every time a user types in an URL into the browser or any web client, the client resolves or "translates" the URL into an IP address. It does this to identify where to send the corresponding HTTP request. The following steps take place to translate the URL into an IP address:
 
 1. The browser first queries the OS with the request asking if it knows the IP address,
 2. the OS checks it's local cache and the HOSTS file which contains mappings between URLs and IP address,
-3. if the OS does not find any mappings, it will query the local DNS resolver which is usually provided by your ISP,
-4. the DNS resolver will also check if it has an answer. If it doesn't, it will recursivelly query
+3. if the OS does not find any mappings, it queries the local DNS resolver which is usually provided by your ISP,
+4. the DNS resolver also checks if it has an answer. If it doesn't, it will recursivelly query
 the nameservers till it receives a response from the nameserver responsible for the domain.  
 
-Once the IP address is retreived, the client sends the HTTP request and displays the page returned.
+Once the IP address is retrieved, the client sends the HTTP request and displays the page returned.
 
 # DNS Spoofing
 Before we can send spoofed responses to the target, we need the target's traffic to pass through our system. This is done by poisoning both the router's and target's ARP cache. The following code shows how this can be done.
@@ -42,10 +42,9 @@ while True:
   time.sleep(2)
 ```
 
-By continously sending spoofed ARP responses, we poison the ARP caches. Now we control the traffic, i.e., we can decide on what to forward and what not to. By stopping all DNS queries from the target, we can then send a spoofed DNS response pointing to our system. This will cause the target to send all future HTTP/HTTPS requests to our machine. 
+By continuously sending spoofed ARP responses, we poison the ARP caches. Now we control the traffic, i.e., we can decide on what to forward and what not to. By stopping all DNS queries from the target, we can then send a spoofed DNS response pointing to our system. This will cause the target to send all future HTTP/HTTPS requests to our machine. 
 
-To stop forwarding all DNS messages, we need to drop them adding a firewall rule. This is carried out
-in the following manner.
+To stop forwarding all DNS messages, we need to drop them by adding a firewall rule. This is carried out in the following manner.
 
 ```python
 # Check to see if we are on linux
@@ -79,7 +78,7 @@ if (pkt[IP].src == g_target_ip and
   else:
     ip_layer = IP(src=pkt[IP].dst, dst=pkt[IP].src)
 
-  # Create the spoofed DNS response (returning back our IP as the answer instead of the endpoint)
+  # Create the spoofed DNS response (returning our IP as the answer instead of the endpoint)
   dns_resp =  ip_layer/ \
         UDP(
           dport=pkt[UDP].sport,
@@ -125,11 +124,11 @@ if __name__ == '__main__':
 The host argument must be set to the IP address on which the webserver is being run on. Now any page accessed by the target will result in the above html being returned.
 
 # Results
-I am running the dns-hijacker and the web server on a Raspberry PI 3B+ with the target as my iPhone.
+I am running the DNS-hijacker and the web server on a Raspberry PI 3B+ with the target as my iPhone.
 
 ![dns-hijacker](../../assets/videos/dns-hijacker.gif)
 
-Once the DNS hijacker and the web server are started, sending a request from my iPhone results in the following.
+Sending a request from my iPhone once the DNS hijacker and the web server are started,  results in the following.
 
 ![pwned](../../assets/videos/pwned.gif)
 
