@@ -11,20 +11,20 @@ tags:
   - Python
 ---
 
-I have recently delved into firmware analysis to look for vulnerabilites and came across the important concept of entropy used in visual firmware analysis. So what is it?
+I have recently delved into firmware analysis to look for vulnerabilities and came across the vital concept of entropy used in visual firmware analysis. So what is it?
 
 # Entropy
-Taking the defination from [fourmilab][ent], it is the information density or randomness of the contents of the file. In simple terms, it is the measure of the number of bits required to represent each character appearing in the file. Lets say we have the following string
+Taking the definition from [fourmilab][ent], it is the information density or randomness of the contents of the file. In simple terms, it is the measure of the number of bits required to represent each character appearing in the file. Let's say we have the following string
 
 `aabbccaaccbb`
 
-By looking at the patterns, we can say that the number of bits required to represent the whole string can be low as we can replace each pattern with a reduced number of bits. But take a look at the following string.
+By looking at the patterns, we can say that the number of bits required to represent the whole string will be low as we can replace each pattern with a reduced number of bits. However, take a look at the following string.
 
 `abdcdabcdad`
 
 The patterns previously present are no longer there. This will mean that we will need a higher number of bits to represent the above string. 
 
-Ok that's all well and good, but how does this apply to firmware analysis. Well, using the above concept and identifying that compressed and encrpyted data have a much higher entropy than other data, we can distinguish the various regions of the firmware. 
+Ok, that's all well and good, but how does this apply to firmware analysis. Well, using the above concept and identifying that compressed and encrypted data have much higher entropy than other data, we can distinguish the various regions of the firmware. 
 
 Before we start calculating the region based entropy, let's calculate the entropy for the entire file using `Shanon entropy`. The formula is shown below.
 
@@ -54,15 +54,15 @@ def information_entropy(data):
   
   return entropy
 ```
-Running the above function with the input as one of TP Link's router firware (TL-WR841Nv14), we get the following output. We can see in the same image that the value is correct by looking at the output from fourmilab's ENT.
+Running the above function with the input as one of TP Link's router firmware (TL-WR841Nv14), we get the following output. We can see in the same image that the value is correct by looking at the output from fourmilab's ENT.
 
 ![Ent-output](../../assets/images/entropy/1.png)
 
-Also, to show that compressed or encrypted data have a much higher entropy, we run the same code on `sample-text.txt` which contains fifty paragraphs of random text from an online text generator.
+Also, to show that compressed or encrypted data have much higher entropy, we run the same code on `sample-text.txt` which contains fifty paragraphs of random text from an online text generator.
 
 ![sample-text](../../assets/images/entropy/sample-text.png)
 
-The entropy of the file and the compressed file is shown below
+The entropy of the file and the compressed file is shown below.
 
 ![entropy-sample](../../assets/images/entropy/entropy-sample-text.png)
 
@@ -83,7 +83,7 @@ def chunk_wise_entropy(file_data):
 
 	plot_entropy(entropy_chunk, offset_chunk)
 ```
-The above function divides the entire file into chunks of the specified size, and calculates the entropy for each chunk. Each chunk's entropy is stored in a list which we can use to plot the region based entropy.  
+The above function divides the entire file into chunks of the specified size and calculates the entropy for each chunk. Each chunk's entropy is stored in a list which we can use to plot the region based entropy.  
 
 # Results
 Calculating the entropy of each chunk of the file helps us identify regions in the file where there might be compressed or encrypted data. To test this, I have put the compressed text file between the uncompressed file in the manner shown below.
@@ -94,12 +94,12 @@ On running the script on `main-test`, we get the following result.
 
 ![main-graph](../../assets/images/entropy/4.png)
 
-We can very clearly distinguish the compressed region by looking at the region with the high entropy. This is because the file `main-test` has contents in the order `sample-text | compressed-text | sample-text`. Since the compressed text is in between the file, the region in middle has a much higher entropy when compared to the rest. 
+We can very clearly distinguish the compressed region by looking at the region with the high entropy. This is because the file `main-test` has contents in the order `sample-text | compressed-text | sample-text`. Since the compressed text is in between the file, the region in the middle has a much higher entropy when compared to the rest. 
 
-To test your own files, you can use the whole from my github [page][page].
+To test your files, you can get the entire code from my github [page][page].
 
 # Applications
-Most malware, to avoid AV detection, encrypt most of their code with just the unpacker left alone so that it can, during run time, decrypt the file and load it. By calculating the region based entropy and comparing it with existing samples, we can quickly classify malware. This is the basis for [SARVAM][sarvam] which is a fast malware classifier.
+Most malware, to avoid AV detection, encrypt most of their code with just the unpacker left alone so that it can, during run time, decrypt the file and load it. By calculating the region based entropy and comparing it with existing samples, we can quickly classify malware. This is the basis for [SARVAM][sarvam], which is a fast malware classifier.
 
 That's it for this post. Please let me know what you think.
 
