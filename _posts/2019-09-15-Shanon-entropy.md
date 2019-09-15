@@ -35,22 +35,22 @@ The same rewritten in python is shown below.
 ```python
 def information_entropy(data):
   # Create a counter for all the 256 different possible values
- 	possible_vals = dict(((chr(x), 0) for x in range(0, 256)))
+  possible_vals = dict(((chr(x), 0) for x in range(0, 256)))
 
   # Increment the counter if the byte has the same value as one of the keys 
   for byte in data:
-		possible_vals[chr(byte)] +=1
+    possible_vals[chr(byte)] +=1
 
-	data_len = len(data)
-	entropy = 0.0
+  data_len = len(data)
+  entropy = 0.0
 
   # Compute the entropy of the data
   for count in possible_vals:
-		if possible_vals[count] == 0:
-			continue
+    if possible_vals[count] == 0:
+      continue
 
-		p = float(possible_vals[count] / data_len)
-		entropy -= p * math.log(p, 2)
+    p = float(possible_vals[count] / data_len)
+    entropy -= p * math.log(p, 2)
   
   return entropy
 ```
@@ -70,18 +70,18 @@ Now, to identify regions of higher entropy in between files, we add the followin
 
 ```python
 def chunk_wise_entropy(file_data):
-	entropy_chunk = []
-	offset_chunk = []
+  entropy_chunk = []
+  offset_chunk = []
 
-	counter = 0
-	data_len = len(file_data)
-	if file_data:
-		while counter <= data_len:
-			entropy_chunk.append(information_entropy(file_data[counter:counter+CHUNK_SIZE]))
-			offset_chunk.append(counter)
-			counter += CHUNK_SIZE
+  counter = 0
+  data_len = len(file_data)
+  if file_data:
+    while counter <= data_len:
+      entropy_chunk.append(information_entropy(file_data[counter:counter+CHUNK_SIZE]))
+      offset_chunk.append(counter)
+      counter += CHUNK_SIZE
 
-	plot_entropy(entropy_chunk, offset_chunk)
+  plot_entropy(entropy_chunk, offset_chunk)
 ```
 The above function divides the entire file into chunks of the specified size and calculates the entropy for each chunk. Each chunk's entropy is stored in a list which we can use to plot the region based entropy.  
 
@@ -98,7 +98,7 @@ We can very clearly distinguish the compressed region by looking at the region w
 
 To test your files, you can get the entire code from my github [page][page].
 
-# Applications
+## Another Application 
 Most malware, to avoid AV detection, encrypt most of their code with just the unpacker left alone so that it can, during run time, decrypt the file and load it. By calculating the region based entropy and comparing it with existing samples, we can quickly classify malware. This is the basis for [SARVAM][sarvam], which is a fast malware classifier.
 
 That's it for this post. Please let me know what you think.
