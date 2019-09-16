@@ -26,7 +26,7 @@ The patterns previously present are no longer there. This will mean that we will
 
 Ok, that's all well and good, but how does this apply to firmware analysis. Well, using the above concept and identifying that compressed and encrypted data have much higher entropy than other data, we can distinguish the various regions of the firmware. 
 
-Before we start calculating the region based entropy, let's calculate the entropy for the entire file using `Shanon entropy`. The formula is shown below.
+Before we start calculating the region based entropy, let's calculate the entropy for the entire file using `Shannon entropy`. The formula is shown below.
 
 ![shanon](../../assets/images/entropy/shanon-form.png)
 
@@ -100,7 +100,7 @@ Testing this on TP Link's firmware, we get the following result.
 
 ![TP-Entropy](../../assets/images/entropy/tp-entropy.png)
 
-Looking at binwalk's results (shown below) and the above image, we can see that at the start of the headers, there is a drop in the entropy (eg. after 1000000) and then a sharp rise in entropy for the compressed regions. In this manner, we can identify the compressed and encrpted regions of most files.
+Looking at binwalk's results (shown below) and the above image, we can see that at the start of the headers, there is a drop in the entropy (eg. after 1000000) and then a sharp rise in entropy for the compressed regions. In this manner, we can identify the compressed and encrypted regions of most files.
 
 ![TP-Entropy](../../assets/images/entropy/binwalk-out.png)
 
