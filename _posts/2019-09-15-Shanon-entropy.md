@@ -26,7 +26,7 @@ The patterns previously present are no longer there. This will mean that we will
 
 Ok, that's all well and good, but how does this apply to firmware analysis. Well, using the above concept and identifying that compressed and encrypted data have much higher entropy than other data, we can distinguish the various regions of the firmware. 
 
-Before we start calculating the region based entropy, let's calculate the entropy for the entire file using `ShaNNon entropy`. The formula is shown below.
+Before we start calculating the region based entropy, let's calculate the entropy for the entire file using `Shannon entropy`. The formula is shown below.
 
 ![shanon](../../assets/images/entropy/shanon-form.png)
 
