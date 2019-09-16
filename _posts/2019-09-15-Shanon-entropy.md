@@ -94,7 +94,15 @@ On running the script on `main-test`, we get the following result.
 
 ![main-graph](../../assets/images/entropy/4.png)
 
-We can very clearly distinguish the compressed region by looking at the region with the high entropy. This is because the file `main-test` has contents in the order `sample-text | compressed-text | sample-text`. Since the compressed text is in between the file, the region in the middle has a much higher entropy when compared to the rest. 
+We can very clearly distinguish the compressed region by looking at the region with the high entropy. This is because the file `main-test` has contents in the order `sample-text | compressed-text | sample-text`. Since the compressed text is in between the file, the region in the middle has a much higher entropy when compared to the rest.
+
+Testing this on TP Link's firmware, we get the following result.
+
+![TP-Entropy](../../assets/images/entropy/tp-entropy.png)
+
+Looking at binwalk's results (shown below) and the above image, we can see that at the start of the headers, there is a drop in the entropy (eg. after 1000000) and then a sharp rise in entropy for the compressed regions. In this manner, we can identify the compressed and encrpted regions of most files.
+
+![TP-Entropy](../../assets/images/entropy/binwalk-out.png)
 
 To test your files, you can get the entire code from my github [page][page].
 
