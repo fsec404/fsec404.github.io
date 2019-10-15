@@ -104,7 +104,7 @@ The script is run in the following manner.
 
 The SYN packets can be seen below.
 
-![syn-flood-wireshark](../../assets/images/smurf/syn-flood-wireshark.png)
+![syn-flood-wireshark](../../assets/images/syn-flood/syn-flood-wireshark.png)
 
 To specify more ports to send packets to, use the `-c` flag.
 
