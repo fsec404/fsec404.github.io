@@ -1,5 +1,5 @@
 ---
-title: "An Introduction to a Few Network Attacks"
+title: "An Introduction to a Few DoS Attacks"
 date: 2019-10-15
 toc: true
 toc_label: "Table of Contents"
