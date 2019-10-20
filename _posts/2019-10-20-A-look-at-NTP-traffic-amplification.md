@@ -17,7 +17,7 @@ In a previous [post][dos], we had a look at some low-level DoS attacks. In this 
 # NTP
 The Network Time Protocol is a protocol designed to synchronize the clocks of computers over a network. This is the protocol that all your devices use to get the correct time for your timezone. 
 
-In this post, we are concerned with the mode 7 packet, which is used exchanging for data between an NTP server and a client for purposes other than time synchronization, e.g., monitoring, statistics gathering, and configuration. It has the following format:
+In this post, we are concerned with the mode 7 packet, which is used for exchanging data between an NTP server and a client for purposes other than time synchronization, e.g., monitoring, statistics gathering, and configuration. It has the following format:
 
 ![NTP-Mode-7-Message-Format](../../assets/images/ntp-amplification/ntp_priv_format.png)
 
