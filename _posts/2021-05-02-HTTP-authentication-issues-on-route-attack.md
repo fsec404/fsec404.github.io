@@ -42,7 +42,7 @@ def request(flow: http.HTTPFlow) -> None:
 
 All the above script does is respond to any request for `/images/cookie` with an image of a salad. The following video shows how the attack looks to the client before and after the attack.
 
-{% include video id="1EB4Q2RBTwHLBO4Zo-c8baoeboRnU8Fsc" provider="google-drive" %}
+{% include video id="1lBqoNCF7ytKwBV1XY7ATo0OTH_A1G7MU" provider="google-drive" %}
 
 We can clearly see that image of the cookie is being replaced with an image of a salad. In this manner, any content can be easily replaced, including the entire web page, as the attacker has complete control of deciding what responses are sent back to the client. 
 
