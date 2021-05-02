@@ -1,6 +1,6 @@
 ---
 title: "A Look At A Simple On-Route HTTP Content Manipulation Attack"
-date: 2019-10-20
+date: 2021-05-02
 toc: true
 toc_label: "Table of Contents"
 categories:
@@ -18,7 +18,7 @@ There are numerous ways an attacker can be force the client to themselves a part
 
 I have written a simple HTML website that displays the following page. 
 
-![Original-Site](../../assets/images/ntp-amplification/original_site.png)
+![Original-Site](../../assets/images/http-onpath/original_site.png)
 
 To inject my own content, I have written the following simple script using mitmproxy's APIs. 
 
